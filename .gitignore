@@ -1,0 +1,6 @@
+.vercel
+node_modules/
+*.png
+*-v2.png
+odiff-result.txt
+vercel-deploy.log
