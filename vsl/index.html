@@ -192,29 +192,64 @@ right from your kitchen.</p></div></div><div class="flex justify-center py-0" ar
     if (rot) rot.style.display = 'none';
 
     if (alvo) {
+      /* estilo INLINE: as classes Tailwind destes blocos nao existem no CSS do clone
+         (nao estavam no DOM no build) — valores lidos do original em 390px */
+      var S = {
+        rotulo: 'font-weight:900;font-size:12px;line-height:16px;letter-spacing:2.16px;text-transform:uppercase;color:rgb(96,26,37)',
+        seta:   'width:20px;height:20px;display:block;margin:2px auto 0',
+        total:  'font-weight:900;font-size:20px;line-height:28px;letter-spacing:-1px;text-transform:uppercase;color:rgb(96,26,37);margin:0 0 32px;word-break:break-word',
+        risco:  'text-decoration:line-through;text-decoration-color:#5E1A24;text-decoration-thickness:4px;color:#BE7A12;font-weight:700',
+        badgeL: 'display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#F0C766 0%,#BE7A12 50%,#7A4A08 100%);color:#FDF6E9;padding:8px 20px;border-radius:999px;font-size:12px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase',
+        valid:  'font-family:inherit;font-weight:900;font-size:24px;line-height:30px;letter-spacing:-0.6px;color:rgb(96,26,37);margin:0',
+        today:  'font-weight:700;font-size:14px;line-height:20px;letter-spacing:1.4px;text-transform:uppercase;color:rgb(108,75,81);margin:0',
+        badgeD: 'display:inline-flex;align-items:center;background:rgb(43,166,74);color:#fff;padding:8px 20px;border-radius:999px;font-size:12px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:16px',
+        col:    'display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:32px'
+      };
       alvo.innerHTML =
-        '<div class="flex flex-col items-center gap-1 mb-8 -mt-4 text-marsala animate-bounce" aria-hidden="true">' +
-          '<span class="font-black uppercase tracking-[0.18em] text-xs">Your discounted price</span>' +
-          '<svg class="w-9 h-9 md:w-11 md:h-11 drop-shadow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>' +
+        '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:-16px 0 32px" class="animate-bounce" aria-hidden="true">' +
+          '<span style="' + S.rotulo + '">Your discounted price</span>' +
+          '<svg style="' + S.seta + '" viewBox="0 0 24 24" fill="none" stroke="' + 'rgb(96,26,37)' + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>' +
         '</div>' +
-        '<p class="text-marsala font-black text-xl sm:text-3xl mb-8 tracking-tighter uppercase break-words">Total Value (70 recipes + 8 Bonuses): ' +
-          '<span class="gold-accent line-through !decoration-[#5E1A24] decoration-[4.4px] font-bold">$47.00</span></p>' +
-        '<div class="mb-8 flex flex-col items-center gap-4">' +
-          '<div class="inline-flex items-center gap-2 bg-[linear-gradient(135deg,#F0C766_0%,#BE7A12_50%,#7A4A08_100%)] text-cream px-5 py-2 rounded-full text-xs sm:text-sm font-black uppercase tracking-[0.2em] shadow-marsala"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Limited-time pricing</div>' +
-          '<h2 class="font-sans text-2xl sm:text-3xl md:text-4xl font-black text-marsala tracking-tight leading-tight">Valid <span class="text-marsala">' + curto(ini) + ' – ' + curto(hoje) + '</span></h2>' +
-          '<p class="text-sm sm:text-base font-bold text-muted-foreground uppercase tracking-widest">Today only, get it for:</p>' +
+        '<p style="' + S.total + '">Total Value (70 recipes + 8 Bonuses): <span style="' + S.risco + '">$47.00</span></p>' +
+        '<div style="' + S.col + '">' +
+          '<div style="' + S.badgeL + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Limited-time pricing</div>' +
+          '<h2 style="' + S.valid + '">Valid ' + curto(ini) + ' – ' + curto(hoje) + '</h2>' +
+          '<p style="' + S.today + '">Today only, get it for:</p>' +
         '</div>' +
-        '<div class="relative overflow-hidden inline-flex items-center gap-2 bg-success text-success-foreground px-5 py-2 rounded-full text-xs sm:text-sm font-black uppercase tracking-[0.15em] mb-4 shadow-md">' +
-          '<span class="relative z-10">' + DESCONTO + '% discount applied</span>' +
-          '<span class="metallic-sheen pointer-events-none absolute inset-0" aria-hidden="true"></span>' +
-        '</div>';
+        '<div style="' + S.badgeD + '">' + DESCONTO + '% discount applied</div>';
       alvo.style.display = '';
     }
 
     /* troca o preco exposto pelo preco com desconto */
     if (preco) {
-      preco.innerHTML = PRECO_FINAL + ' <span class="text-3xl sm:text-5xl md:text-6xl lg:text-8xl">USD</span>';
+      preco.setAttribute('style',
+        'font-weight:900;font-size:60px;line-height:60px;letter-spacing:-3px;color:rgb(43,166,74);margin:0 0 24px');
+      preco.innerHTML = PRECO_FINAL +
+        ' <span style="font-size:30px;line-height:36px;letter-spacing:-1.5px;font-weight:900">USD</span>';
     }
   };
 })();
+</script>
+
+<!-- Meta Pixel — Round Popcorn -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1399045425379897');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1399045425379897&ev=PageView&noscript=1"/></noscript>
+
+<!-- UTMify -->
+<script>
+  window.pixelId = "6a5537a2ab4265fa26363179";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
 </script>
